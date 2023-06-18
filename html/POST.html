@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='UTF-8'>
+        <title>Postar informações (POST)</title>
+        <link rel='stylesheet' href='../css/estilo.css'>
+    </head>
+
+    <body class="conteudo exercicio">
+        <h1>Postar informações pela API</h1>
+
+        <button onclick="ajax()">Enviar </button>
+
+        <h4>Resultados no console</h4>
+
+        <script>
+            const config={
+                url: "https://reqres.in/api/users",
+                metodo: "POST",
+                sucesso(resposta) {
+                    const dicas = JSON.parse(resposta)
+                    console.log(dicas)//criarTabela(dicas.slip);
+                },
+                erro(e) {
+                    const msg = document.createTextNode(`${e.codigo}: ${e.texto}`)
+                    document.body.appendChild(msg)
+                }
+            }
+            function ajax() {
+                const xhr = new XMLHttpRequest()
+                xhr.open(config.metodo, config.url, true)//true para assincrona
+
+                xhr.onload = e => {
+                    if (xhr.status === 200) {
+                        config.sucesso(xhr.response)
+                    } else if (xhr.status >= 400) {
+                        config.erro({
+                            codigo: xhr.status,
+                            texto: xhr.statusText
+                        })
+                    }
+                    console.log(xhr.status);
+                }
+
+                const data = {
+                    "id": 7,
+                    "email":"thiago.fonseca@reqres.in",
+                    "first_name":"Thiago",
+                    "last_name":"Fonseca",
+                    "avatar":"https://reqres.in/img/faces/7-image.jpg" 
+                };
+
+                console.log(data);
+  
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.send(JSON.stringify(data));
+            }
+        </script>
+    </body>
+</html>
